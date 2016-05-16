@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<html lang="cn">
+  <head>
+    <meta charset="utf-8">
+    <title>Slidingactivity笔记</title>
+    
+    
+    <meta name="author" content="Ocean-藏心">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/typo.css" rel="stylesheet">
+    <link href="/css/solarized.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/css/datatables-bootstrap.css" rel="stylesheet">
+    <link href="/css/site.css" rel="stylesheet">
+
+    <!-- javascript files -->
+    <script type="text/javascript" src="/js/jquery-2.0.0.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/js/datatables-bootstrap.js"></script>
+    <script type="text/javascript" src="/js/site.js"></script>
+
+    <!-- Le fav and touch icons -->
+    <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+    <script type="text/javascript">
+    </script>
+
+  </head>
+
+  <body id="scroll-pane" data-spy="scroll" data-target="#time-list-nav">
+    <div class="wrapper">
+      <!-- 导航条 -->
+      <div class="nav navbar-nav" id="nav-wrap">
+        <div class="navbar-header">
+          <div class="col-md-2">
+          </div>
+          <div class="col-md-8">
+            <a class="navbar-brand" href="/">
+              <span class="site-author"> Ocean-藏心 </span>
+              <span class="site-title"> /* 做个合格的程序员 */ </span>
+            </a>
+            <ul id="nav-menu" class="nav navbar-nav">
+              
+              
+              
+
+
+
+
+
+<li class="posts"><a href="/posts.html">文章</a></li>
+<li class="timeline"><a href="/timeline.html">归档</a></li>
+<li class="categories"><a href="/categories.html">目录</a></li>
+<li class="about"><a href="/about.html">关于</a></li>
+
+            </ul>
+          </div>
+          <div class="col-md-2">
+          </div>
+        </div>
+      </div>
+
+      <!-- 正文 -->
+      
+
+<div class="row post-full typo">
+  <div class="col-md-2"></div>
+  <div class="col-md-8 typo">
+    <h2>Slidingactivity笔记 </h2>
+    <div class="post_info">
+      
+    </div>
+    <div class="content">
+      <h3 id="slidingactivityxml-">sliding_activity.xml 布局分析</h3>
+
+<pre><code>MultiShrinkScroller(id:"multiscroller")
+	LinearLayout("vertical")
+		View(id:"transparent_view" 150dp)
+		RelativeLayout
+			FrameLayout(id:"toolbar_parent")
+				layout:@layout/sliding_header
+			layout:@layout/sliding_content(below:"toolbar_parent")
+			FloatingActionButton(below:"toolbar_parent" id:("fab"))
+</code></pre>
+
+<h4 id="slidingheaderxml">sliding_header.xml</h4>
+
+<pre><code>FrameLayout
+	View(id:"photo_background" "gone")
+	ImageView(id:"photo" clickable:false)
+	View(id:"photo_touch_intercept_overlay")
+	View(id:"title_gradient" layout_gravity:"bottom")
+	View(id:"action_bar_gradient" layout_gravity:"top")
+	Toolbar(id:"toolbar" layout_gravity:"end|top")
+</code></pre>
+
+<h4 id="slidingcontentxml">sliding_content.xml</h4>
+
+<pre><code>TouchlessScrollView(id:"content_scroller")
+	FrameLayout(id:"content_container" orientation:"vertical")
+</code></pre>
+
+<h3 id="multishrinkscroller">MultiShrinkScroller</h3>
+<pre><code>scroller = new Scroller(context,INTERPOLATOR)
+touchSlop = configuration.getScaledTouchSlop()
+minimumVelocity
+maximumVelocity
+
+toolbarElevation = 4.5dp
+isTwoPanel ture:false
+</code></pre>
+
+<h5 id="section">常量</h5>
+<pre><code>transparentStartHeight 150dp
+maximumTitleMargin 16dp
+dismissDistanceOnScroll 100dp  滑动超过100dp时dismiss
+dismissDistanceOnRelease 40dp  释放时距离超过40dp时dismiss
+snapToTopSlopHeight      33dp
+photoRatio	0.7
+actionbarSize 55dp
+minimumHeaderHeight 55dp
+</code></pre>
+
+<h5 id="view">View变量</h5>
+
+<pre><code>scrollView(id:content_scroller)
+scrollViewChild(id:content_container)
+toolbar		(id: toolbar_parent)
+photoViewContainer	(id:toolbar_parent)
+transparentView		(id:transparent_view)
+largeTextView		(id:large_title)
+invisiblePlaceholderTextView	(id:placeholder_textview)
+startColumn			(id:empty_start_column)
+</code></pre>
+
+<h4 id="section-1">函数名解释</h4>
+
+<pre><code>getScrollUntilOffBottom  getScroll | Until | OffBottom 返回从底部划出来的高度 正值
+</code></pre>
+
+<p><strong>研究速记</strong>	</p>
+
+<ol>
+  <li>UpdateFab</li>
+  <li>退出时上面150dp的transparentView透明度变化原因 winscrim</li>
+  <li>scrollOffBottom 原因 translateAnimation 
+  listener.onStartScrollOffBottom();
+    exitAnimationListner-&gt;  listener.onScrolledOffBottom();</li>
+  <li>this.isOpenImageSquare 是否expandHeader</li>
+  <li>
+    <p>expandHeader原理<br />
+ 给header做动画：ObjectAnimator animator = ObjectAnimator.ofInt(this, “headerHeight”,
+                 maximumHeaderHeight);
+ 给scrollView做动画 ：  <br />
+  ObjectAnimator.ofInt(scrollView, “scrollY”, -scrollView.getScrollY()).start();	
+6 .     collapsedTitleStartMargin = ((Toolbar) findViewById(R.id.toolbar)).getContentInsetStart();  16dp</p>
+  </li>
+  <li>
+    <p>updateFabStatus(scrollView.getScrollY()); 滑动超过100dp时小时 小于时 显示</p>
+  </li>
+  <li>
+    <p>maximumHeaderHeight 300dp intermediateHeaderHeight 180dp</p>
+  </li>
+  <li>
+    <p>setHeaderHeight  非常关键的方法
+ {
+    toolbarLayoutParams.height = height;
+     toolbar.setLayoutParams(toolbarLayoutParams);
+      updatePhotoTintAndDropShadow();
+     updateHeaderTextSizeAndMargin();
+ }</p>
+  </li>
+  <li>
+    <p>getMaximumScrollableHeaderHeight{   return isOpenImageSquare ? maximumHeaderHeight : intermediateHeaderHeight;}</p>
+  </li>
+  <li>maximumHeaderTextSize = largeTextView.getHeight(); 105px (35dp	)( Nexus N5)</li>
+</ol>
+
+<p><strong>MultiShrinkScroller滑动指南</strong></p>
+
+<pre><code>@Override
+public boolean onInterceptTouchEvent(MotionEvent event) {
+    if (velocityTracker == null) {
+        velocityTracker = VelocityTracker.obtain();
+    }
+    velocityTracker.addMovement(event);
+
+    // The only time we want to intercept touch events is when we are being dragged.
+    return shouldStartDrag(event);
+}
+</code></pre>
+
+<p>在onInterceptTouchEvent中返回shouldStartDrag</p>
+
+<pre><code>private boolean shouldStartDrag(MotionEvent event) {
+   
+    switch (event.getAction()) {
+        // If we are in the middle of a fling and there is a down event, we'll steal it and
+        // start a drag.
+        case MotionEvent.ACTION_DOWN:
+            updateLastEventPosition(event);
+            if (!scroller.isFinished()) {
+                startDrag();
+                return true;
+            } else {
+                receivedDown = true;
+            }
+            break;
+
+        // Otherwise, we will start a drag if there is enough motion in the direction we are
+        // capable of scrolling.
+        case MotionEvent.ACTION_MOVE:
+            if (motionShouldStartDrag(event)) {
+                updateLastEventPosition(event);
+                startDrag();
+                return true;
+            }
+            break;
+    }
+
+    return false;
+}
+</code></pre>
+
+<p>updateLastEventPosition 记录每次按下的位置</p>
+
+<p>startDrag {   isBeingDragged = true;scroller.abortAnimation();}</p>
+
+<pre><code>private boolean motionShouldStartDrag(MotionEvent event) {
+    final float deltaY = event.getY() - lastEventPosition[1];
+    return deltaY &gt; touchSlop || deltaY &lt; -touchSlop;
+}
+	
+
+
+
+@Override
+public boolean onTouchEvent(MotionEvent event) {
+   if (!isBeingDragged) {
+        if (shouldStartDrag(event)) {
+            return true;
+        }
+        if (action == MotionEvent.ACTION_UP &amp;&amp; receivedDown) {
+        	//中间没有MOVE event 因此是click
+            receivedDown = false;
+            return performClick();
+        }
+        return true;
+    }
+
+    switch (action) {
+        case MotionEvent.ACTION_MOVE:
+            final float delta = updatePositionAndComputeDelta(event);
+            scrollTo(0, getScroll() + (int) delta);
+            receivedDown = false;
+
+            if (isBeingDragged) {
+                final int distanceFromMaxScrolling = getMaximumScrollUpwards() - getScroll();
+                if (delta &gt; distanceFromMaxScrolling &amp;&amp; Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP) {
+                    // The ScrollView is being pulled upwards while there is no more
+                    // content offscreen, and the view port is already fully expanded.
+                    edgeGlowBottom.onPull(delta / getHeight(), 1 - event.getX() / getWidth());
+                }
+
+                if (!edgeGlowBottom.isFinished()) {
+                    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.JELLY_BEAN) {
+                        postInvalidateOnAnimation();
+                    } else {
+                        postInvalidate();
+                    }
+                }
+
+                if (shouldDismissOnScroll()) {
+                    scrollOffBottom();
+                }
+
+            }
+            break;
+
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_CANCEL:
+            stopDrag(action == MotionEvent.ACTION_CANCEL);
+            receivedDown = false;
+            break;
+    }
+
+    return true;
+}
+</code></pre>
+
+<p>updatePositionAndComputeDelta 返回滑动delta，对下拉的Move事件做惰性处理</p>
+
+<pre><code>final int distanceFromMaxScrolling = getMaximumScrollUpwards() - getScroll();
+if (delta &gt; distanceFromMaxScrolling &amp;&amp; Build.VERSION.SDK\_INT &gt;= Build.VERSION_CODES.LOLLIPOP) {
+	// The ScrollView is being pulled upwards while there is no more
+	// content offscreen, and the view port is already fully expanded.
+	edgeGlowBottom.onPull(delta / getHeight(), 1 - event.getX() / getWidth());
+}
+
+private int getMaximumScrollUpwards() {
+        return transparentStartHeight
+                // How much the ScrollView can scroll. 0, if child is smaller than ScrollView.
+                + Math.max(0, scrollViewChild.getHeight() - getHeight());
+}
+</code></pre>
+
+
+    </div>
+
+    
+
+    <hr>
+      <ul class="pagination pull-right">
+        
+        <li class="prev disabled"><a>&larr; 前一篇</a></li>
+        
+        <li><a href="/posts.html">索引</a></li>
+        
+        <li class="next"><a href="/2015/10/02/androidQ&A" title="Androidq&a">后一篇 &rarr;</a></li>
+        
+      </ul>
+    <br />
+    <div id="comment-hook"></div>
+    
+
+
+  <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key='/2015/10/02/SlidingActivity笔记' data-title='Slidingactivity笔记' data-url='http://blog.oceancx.com/2015/10/02/SlidingActivity%E7%AC%94%E8%AE%B0'></div>
+<!-- 多说评论框 end -->
+<script type="text/javascript">
+    var duoshuo_developer = 1;
+    var duoshuo_shortname = 'oceancx'; // required: replace example with your forum shortname
+    
+
+    var duoshuoQuery = {short_name:"oceancx"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+
+
+
+
+  </div>
+  <div class="col-md-2"></div>
+</div>
+
+
+
+    </div>
+    <!-- 底部声明 -->
+    <div class="row bottom">
+      <div class="col-md-2">
+      </div>
+      <div class="col-md-8 text-center">
+        &mdash;&nbsp;&nbsp;<a href="https://github.com/oceancx" class="license">Github</a>&nbsp;&nbsp;&mdash;
+      </div>
+      <div class="col-md-2">
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>
+

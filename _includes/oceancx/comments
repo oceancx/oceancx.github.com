@@ -1,0 +1,12 @@
+{% if site.oceancx.comments.provider and page.comments != false %}
+
+{% case site.oceancx.comments.provider %}
+{% when "disqus" %}
+  {% include oceancx/comments-providers/disqus %}
+{% when "duoshuo" %}
+  {% include oceancx/comments-providers/duoshuo %}
+{% when "custom" %}
+  {% include custom/comments %}
+{% endcase %}
+
+{% endif %}

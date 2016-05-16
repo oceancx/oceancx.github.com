@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html lang="cn">
+  <head>
+    <meta charset="utf-8">
+    <title>Rubyonrails笔记</title>
+    
+    
+    <meta name="author" content="Ocean-藏心">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/typo.css" rel="stylesheet">
+    <link href="/css/solarized.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/css/datatables-bootstrap.css" rel="stylesheet">
+    <link href="/css/site.css" rel="stylesheet">
+
+    <!-- javascript files -->
+    <script type="text/javascript" src="/js/jquery-2.0.0.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/js/datatables-bootstrap.js"></script>
+    <script type="text/javascript" src="/js/site.js"></script>
+
+    <!-- Le fav and touch icons -->
+    <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+    <script type="text/javascript">
+    </script>
+
+  </head>
+
+  <body id="scroll-pane" data-spy="scroll" data-target="#time-list-nav">
+    <div class="wrapper">
+      <!-- 导航条 -->
+      <div class="nav navbar-nav" id="nav-wrap">
+        <div class="navbar-header">
+          <div class="col-md-2">
+          </div>
+          <div class="col-md-8">
+            <a class="navbar-brand" href="/">
+              <span class="site-author"> Ocean-藏心 </span>
+              <span class="site-title"> /* 做个合格的程序员 */ </span>
+            </a>
+            <ul id="nav-menu" class="nav navbar-nav">
+              
+              
+              
+
+
+
+
+
+<li class="posts"><a href="/posts.html">文章</a></li>
+<li class="timeline"><a href="/timeline.html">归档</a></li>
+<li class="categories"><a href="/categories.html">目录</a></li>
+<li class="about"><a href="/about.html">关于</a></li>
+
+            </ul>
+          </div>
+          <div class="col-md-2">
+          </div>
+        </div>
+      </div>
+
+      <!-- 正文 -->
+      
+
+<div class="row post-full typo">
+  <div class="col-md-2"></div>
+  <div class="col-md-8 typo">
+    <h2>Rubyonrails笔记 </h2>
+    <div class="post_info">
+      
+    </div>
+    <div class="content">
+      <h3 id="rails">建立一个Rails项目</h3>
+
+<ol>
+  <li>rails new <project name=""> -d mysql</project></li>
+  <li>cd <project dir=""></project></li>
+  <li>rails s</li>
+</ol>
+
+<p>如果运行3运行失败</p>
+
+<ol>
+  <li>如果是rails 4.2.4 那么在 Gemfile 中 mysql2 后面 要加 ‘~&gt; 0.3.18’</li>
+  <li>如果是mysql错误 那么就 rake db:create db:migrate</li>
+  <li>如果还错，那么就在config/database.yml 中输入密码</li>
+</ol>
+
+<h3 id="section">建立数据表结构</h3>
+
+<ol>
+  <li>
+    <p>更改数据库的表结构，Rails给出的方法是 <a href="http://guides.rubyonrails.org/">Migration</a></p>
+
+    <p>rails g migration CreateIssues</p>
+  </li>
+  <li>
+    <p>可以在生成的文件中添加需要的字段：</p>
+
+    <p>class CreateIssues &lt; ActiveRecord::Migration
+   def change
+     create_table :issues do |t|
+       t.string :title
+       t.timestamps
+     end
+   end
+ end</p>
+  </li>
+  <li>
+    <p>运行</p>
+
+    <p>rake db:migrate
+把修改内容真正写进mysql数据库。会生成 db/schema.rb文件</p>
+  </li>
+</ol>
+
+<h3 id="section-1">添加新字段到数据库</h3>
+
+<pre><code>rails g migration AddContentToIssues content:text
+rake db:migrate
+</code></pre>
+
+<h3 id="controller">生成controller</h3>
+
+<pre><code>rails g controller issues show # 注意是issues 不是 issue
+</code></pre>
+
+<h3 id="section-2">对资源的操作</h3>
+
+<ul>
+  <li>
+    <h4 id="issuesshow">资源的显示 issues#show</h4>
+  </li>
+</ul>
+
+<p>route: get ‘/issues/:id’  =&gt;(to:) ‘issues#show’
+ 例如 GET /issues/17  会传到controller的show方法中 同时将{id: ‘17’}放入到params中</p>
+
+<ul>
+  <li>
+    <h4 id="issuesdestroy">资源的删除 issues#destroy</h4>
+
+    <p>route: delete ‘issues/:id’ =&gt; ‘issues#detroy’</p>
+  </li>
+  <li>
+    <h4 id="issuesnew">资源的创建 issues#new</h4>
+
+    <p>route: get ‘issues/new’ =&gt; ‘issues#new’ # 这一行要写在 get ‘/issues/:id’ 上面 (显示表单  controller里面的是 Issue.new)</p>
+  </li>
+</ul>
+
+<p>没有 get ‘issues’ =&gt; ‘issues#index’, :as =&gt; ‘issues’会报错 ‘undefined method `issues_path’’
+ 添加 get ‘issues’ =&gt; ‘issues#index’ , :as =&gt; ‘issues’</p>
+
+<p>点击提交按钮,启动路由 post ‘issues’ =&gt; ‘issues#create’</p>
+
+<ul>
+  <li>
+    <h4 id="issuesedit">资源的编辑 issues#edit</h4>
+
+    <p>路由: get ‘issues/:id/edit’ =&gt; ‘issues#edit’, :as =&gt; ‘edit_issue’ 创建编辑表单</p>
+
+    <p>这里可以看出 form_for 是很智能的，如果传递给他的是一个新对象，就行在 issues#new 中，那他就会提交到 POST issues/ 而如果给他的时已经赋值过的对象，那他就会提交到 PATCH issues/，</p>
+
+    <p>patch ‘issues/:id’ =&gt; ‘issues#update’</p>
+  </li>
+</ul>
+
+<p>一个资源一共7个路由</p>
+
+<ol>
+  <li>GET /photos photos#index</li>
+  <li>GET /photos/new photos#new</li>
+  <li>POST /photos photos#create</li>
+  <li>GET /photos/:id photos#show</li>
+  <li>GET /photos/:id/edit photos#edit</li>
+  <li>PATCH/PU /photos/:id photos#update</li>
+  <li>DELETE /photos/:id photos#destroy</li>
+</ol>
+
+<h3 id="section-3">笨方法发送消息</h3>
+
+<pre><code>+ &lt;%= render partial: 'issue_list', locals: { issues: @issues } %&gt;
+</code></pre>
+
+<p>partial对应文件名: _issue_list.html.erb</p>
+
+<h3 id="rails-">Rails 连接</h3>
+<p><a href="http://blog.sina.com.cn/s/blog_63041bb80101dgdu.html">Ruby on Rails ② rails常用的验证</a></p>
+
+<p>如果是在production的环境下，应该用rails db进入。（自己推测可能是在开发环境下，对数据库进行了加密）。<a href="https://ruby-china.org/topics/6919">相关Link</a>.</p>
+
+    </div>
+
+    
+
+    <hr>
+      <ul class="pagination pull-right">
+        
+        <li class="prev"><a href="/2015/10/13/DrawableResources" title="Drawableresources">&larr; 前一篇</a></li>
+        
+        <li><a href="/posts.html">索引</a></li>
+        
+        <li class="next"><a href="/2015/10/22/python%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E5%B0%8F%E8%AE%B0" title="Python爬虫知识小记">后一篇 &rarr;</a></li>
+        
+      </ul>
+    <br />
+    <div id="comment-hook"></div>
+    
+
+
+  <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key='/2015/10/19/RubyOnRails笔记' data-title='Rubyonrails笔记' data-url='http://blog.oceancx.com/2015/10/19/RubyOnRails%E7%AC%94%E8%AE%B0'></div>
+<!-- 多说评论框 end -->
+<script type="text/javascript">
+    var duoshuo_developer = 1;
+    var duoshuo_shortname = 'oceancx'; // required: replace example with your forum shortname
+    
+
+    var duoshuoQuery = {short_name:"oceancx"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+
+
+
+
+  </div>
+  <div class="col-md-2"></div>
+</div>
+
+
+
+    </div>
+    <!-- 底部声明 -->
+    <div class="row bottom">
+      <div class="col-md-2">
+      </div>
+      <div class="col-md-8 text-center">
+        &mdash;&nbsp;&nbsp;<a href="https://github.com/oceancx" class="license">Github</a>&nbsp;&nbsp;&mdash;
+      </div>
+      <div class="col-md-2">
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>
+
