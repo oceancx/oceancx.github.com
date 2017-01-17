@@ -272,3 +272,111 @@ glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 coordinates become clamped to the edge, resulting in a stretched edge pattern.
  GL_CLAMP_TO_BORDER: Coordinates outside the range are now given a user-specified
 border color.
+
+
+7.7 Texture Units
+
+You probably wondered why the sampler2D variable is a uniform if we didn’t even assign it
+some value with glUniform. Using glUniform1i we can actually assign a location value to
+the texture sampler so we can set multiple textures at once in a fragment shader. This location of a
+texture is more commonly known as a texture unit.The default texture unit for a texture is 0 which
+is the default active texture unit so we did not had to assign a location in the previous section.
+
+
+
+So to fix our little issue we have 2 options:
+1. We can alter the texture coordinates in the vertex data and swap the y values (subtract the y
+coordinates from 1).
+2. We can edit the vertex shader to swap the y-coordinate automatically by replacing the TexCoord
+assignment with TexCoord = vec2(texCoord.x, 1.0f - texCoord.y);.
+
+8.6 Vector-vector multiplication
+
+8.6.1 Dot product
+
+The dot product of two vectors is equal to the scalar product of their lengths times the cosine of the
+angle between them.
+
+v*k = |v|*|k|*cosθ
+the cosine or cos function becomes 0 when the angle is 90 degrees or 1 when the angle is 0.
+
+This
+allows us to easily test if the two vectors are orthogonal or parallel to each other using the dot
+product (orthogonal means the vectors are at a right-angle to each other).
+
+8.6.2 Cross product
+
+The cross product is only defined in 3D space and takes two non-parallel vectors as input and
+produces a third vector that is orthogonal to both the input vectors.
+
+8.7 Matrices
+8.16 Combining matrices
+
+The true power from using matrices for transformations is that we can combine multiple transformations
+in a single matrix thanks to matrix-matrix multiplication.
+
+It is advised to first do scaling operations, then rotations and lastly
+translations when combining matrices otherwise they might (negatively) affect each other.
+
+The advantage of transforming them to several
+intermediate coordinate systems is that some operations/calculations are easier in certain coordinate
+systems as will soon become apparent.
+
+1. Local space (or Object space)
+2. World space
+3. View space (or Eye space)
+4. Clip space
+5. Screen space
+
+As you can see, due to perspective the lines seem to coincide the farther they’re away. This is
+exactly the effect perspective projection tries to mimic and it does so using a perspective projection
+matrix.
+
+distorted pulled or twisted out of shape; contorted.
+
+
+9.7 Going 3D
+Right-handed system
+By convention, OpenGL is a right-handed system.
+
+Next we need to create a view matrix. We want to move slightly backwards in the scene so
+the object becomes visible (when in world space we’re located at the origin (0,0,0)). To move
+around the scene, think about the following:
+ To move a camera backwards, is the same as moving the entire scene forward.
+That is exactly what a view matrix does, we move the entire scene around inversed to where we
+want the camera to move.
+
+Because we want to move backwards and since OpenGL is a right-handed system we have to
+move in the positive z-axis. We do this by translating the scene towards the negative z-axis. This
+gives the impression that we are moving backwards.
+
+To understand why it’s called right-handed do the following:
+ Stretch your right-arm along the positive y-axis with your hand up top.
+ Let your thumb point to the right.
+ Let your pointing finger point up.
+ Now bend your middle finger downwards 90 degrees.
+
+10.6 Euler angles
+The pitch is the angle that depicts how much we’re looking up or down as seen in the first
+image. The second image shows the yaw value which represents the magnitude we’re looking to
+the left or to the right. The roll represents how much we roll as mostly used in space-flight cameras.
+Each of the Euler angles are represented by a single value and with the combination of all 3 of them
+we can calculate any rotation vector in 3D.
+
+hypotenuse
+
+soh cah toa = just so litter
+
+10.7 Mouse input
+
+before eventually retrieving the direction vector:
+1. Calculate the mouse’s offset since the last frame.
+2. Add the offset values to the camera’s yaw and pitch values.
+3. Add some constraints to the maximum/minimum yaw/pitch values
+4. Calculate the direction vector
+
+12. Colors
+
+absorbed
+perceive 感知
+
