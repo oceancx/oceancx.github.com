@@ -1,2 +1,4 @@
 _site/*
 *.sh
+.gitignore
+image/.DS_Store
